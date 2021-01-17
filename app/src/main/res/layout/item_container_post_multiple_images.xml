@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    app:cardCornerRadius="6dp"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
+    app:cardBackgroundColor="@color/colorPrimaryDark">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/imgProfile"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/imageHolder"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_250sdp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imgProfile">
+
+            <ImageView
+                android:id="@+id/imgPost"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+                app:layout_constraintEnd_toStartOf="@id/verticalSeparator"
+                app:layout_constraintStart_toStartOf="@id/imageHolder"
+                app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+            <ImageView
+                android:id="@+id/imgPost2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toTopOf="@id/horizontalSeparator"
+                app:layout_constraintEnd_toEndOf="@id/imageHolder"
+                app:layout_constraintStart_toEndOf="@id/verticalSeparator"
+                app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+            <ImageView
+                android:id="@+id/imgPost3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:contentDescription="@string/app_name"
+                android:scaleType="centerCrop"
+                app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+                app:layout_constraintEnd_toEndOf="@id/imageHolder"
+                app:layout_constraintStart_toEndOf="@id/verticalSeparator"
+                app:layout_constraintTop_toBottomOf="@id/horizontalSeparator" />
+
+            <LinearLayout
+                android:id="@+id/horizontalSeparator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:orientation="vertical"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+                app:layout_constraintEnd_toEndOf="@id/imageHolder"
+                app:layout_constraintStart_toStartOf="@id/imageHolder"
+                app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+            <LinearLayout
+                android:id="@+id/verticalSeparator"
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+                app:layout_constraintEnd_toEndOf="@id/imageHolder"
+                app:layout_constraintStart_toStartOf="@id/imageHolder"
+                app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+            <TextView
+                android:id="@+id/txtNumberOfImages"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:fontFamily="@font/open_sans_condensed_bold"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="26sp"
+                android:background="@drawable/background_fading_edge"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+                app:layout_constraintEnd_toEndOf="@id/imageHolder"
+                app:layout_constraintStart_toEndOf="@id/verticalSeparator"
+                app:layout_constraintTop_toBottomOf="@id/horizontalSeparator" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/txtPostDescription"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:fontFamily="@font/open_sans"
+            android:maxLines="5"
+            android:textColor="@android:color/white"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/imageHolder" />
+
+    <TextView
+        android:id="@+id/txtUsername"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:fontFamily="@font/open_sans_semibold"
+        android:textSize="14sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="@id/imgProfile"
+        app:layout_constraintEnd_toStartOf="@id/btnOptions"
+        app:layout_constraintStart_toEndOf="@id/imgProfile"
+        app:layout_constraintTop_toTopOf="@id/imgProfile" />
+
+        <View
+            android:id="@+id/separator"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_1sdp"
+            android:background="@color/colorPrimary"
+            android:layout_marginTop="@dimen/_16sdp"
+            android:layout_marginStart="@dimen/_26sdp"
+            android:layout_marginEnd="@dimen/_26sdp"
+            app:layout_constraintTop_toBottomOf="@id/txtPostDescription"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+        <EditText
+            android:id="@+id/txtComment"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
+            android:autofillHints="Enter Comment"
+            android:textColor="@android:color/white"
+            android:textColorHint="@android:color/darker_gray"
+            android:background="@drawable/comment_edit_text"
+            android:fontFamily="@font/open_sans"
+            android:hint="@string/enter_comment"
+            android:inputType="text"
+            android:padding="8dp"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/btnSendComment"
+            app:layout_constraintStart_toEndOf="@id/imgActiveProfile"
+            app:layout_constraintTop_toBottomOf="@id/separator" />
+
+        <ImageView
+            android:id="@+id/btnSendComment"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_round_send_24"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/txtComment"
+            app:layout_constraintBottom_toBottomOf="@id/txtComment"/>
+
+        <ImageView
+            android:id="@+id/btnOptions"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_options_white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+            android:id="@+id/imgActiveProfile"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/ic_empty_profile"
+            android:contentDescription="@string/app_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/txtComment"
+            app:layout_constraintBottom_toBottomOf="@id/txtComment"/>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</androidx.cardview.widget.CardView>

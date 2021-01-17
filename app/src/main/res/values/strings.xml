@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">BloggAppApi</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_firstname">Enter Firstname</string>
+    <string name="enter_lastname">Enter LastName</string>
+    <string name="password">Password</string>
+    <string name="enter_username">Enter Username</string>
+    <string name="enter_birthday">Enter Birthday</string>
+    <string name="register">Register</string>
+    <string name="login">Login</string>
+    <string name="create_new_account">Create New Account</string>
+    <string name="logout">Logout</string>
+    <string name="post">Post</string>
+    <string name="enter_description">Enter Description</string>
+    <string name="profile">Profile</string>
+    <string name="add_image">Add Image</string>
+    <string name="enter_comment">Enter Comment</string>
+    <string name="new_post">New Post</string>
+    <string name="update">Update Post</string>
+    <string name="choose_action">Choose Action</string>
+    <string name="delete">Delete Post</string>
+    <string name="comments">Comments</string>
+    <string name="blogging_app">Blogging App</string>
+    <string name="don_t_have_an_account_yet">Don\'t Have An Account Yet?</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="update_button">UPDATE</string>
+</resources>
