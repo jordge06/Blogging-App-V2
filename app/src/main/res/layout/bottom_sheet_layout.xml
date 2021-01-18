@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomSheet"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:background="@drawable/bottom_sheet_background"
-    android:id="@+id/bottomSheet"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <TextView
         android:layout_width="wrap_content"
@@ -14,6 +14,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
+        android:fontFamily="@font/open_sans_condensed_bold"
         android:text="@string/choose_action"
         android:textColor="@android:color/black"
         android:textSize="18sp"
@@ -23,21 +24,25 @@
         android:id="@+id/actionUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_update"
         android:drawablePadding="30dp"
+        android:fontFamily="@font/open_sans_semibold"
         android:padding="16dp"
         android:text="@string/update"
-        android:textSize="16sp"
-        android:drawableStart="@drawable/ic_update" />
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
 
     <TextView
         android:id="@+id/actionDelete"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:drawableStart="@drawable/ic_delete"
         android:drawablePadding="30dp"
+        android:fontFamily="@font/open_sans_semibold"
         android:padding="16dp"
         android:text="@string/delete"
-        android:textSize="16sp"
-        android:drawableStart="@drawable/ic_delete" />
+        android:textColor="@android:color/darker_gray"
+        android:textSize="16sp" />
 
 
 </LinearLayout>

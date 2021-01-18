@@ -1,4 +1,4 @@
-package com.example.bloggappapi;
+package com.example.bloggappapi.request;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -3,9 +3,9 @@ package com.example.bloggappapi.viewmodels;
 import android.app.Application;
 import android.util.Log;
 
-import com.example.bloggappapi.DeleteBody;
-import com.example.bloggappapi.PostBody;
-import com.example.bloggappapi.UserPostBody;
+import com.example.bloggappapi.request.DeleteBody;
+import com.example.bloggappapi.request.DeleteCommentBody;
+import com.example.bloggappapi.request.PostBody;
 import com.example.bloggappapi.models.Post;
 import com.example.bloggappapi.dao.PostDao;
 import com.example.bloggappapi.dao.UserDao;
@@ -19,8 +19,10 @@ import java.util.List;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Completable;
 import io.reactivex.Flowable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
 public class MainActivityViewModel extends AndroidViewModel {
@@ -89,4 +91,6 @@ public class MainActivityViewModel extends AndroidViewModel {
     public LiveData<Boolean> isPostDeleted() {
         return postRepository.isPostDeleted();
     }
+
+
 }

@@ -3,17 +3,17 @@ package com.example.bloggappapi.repositories;
 import android.content.Context;
 import android.util.Log;
 
-import com.example.bloggappapi.DeleteBody;
-import com.example.bloggappapi.PostBody;
+import com.example.bloggappapi.request.DeleteBody;
+import com.example.bloggappapi.request.DeleteCommentBody;
+import com.example.bloggappapi.request.PostBody;
 import com.example.bloggappapi.models.Post;
-import com.example.bloggappapi.UserPostBody;
+import com.example.bloggappapi.request.UserPostBody;
 import com.example.bloggappapi.network.ApiService;
 import com.example.bloggappapi.network.NoConnectivityException;
 import com.example.bloggappapi.network.RetrofitInstance;
 import com.example.bloggappapi.response.PostResponse;
 
 import java.net.SocketTimeoutException;
-import java.util.ArrayList;
 import java.util.List;
 
 import androidx.annotation.NonNull;
@@ -173,7 +173,53 @@ public class PostRepository {
         return isDeleted;
     }
 
-    public LiveData<Boolean> isUpdated(RequestBody id, RequestBody postDescription, List<MultipartBody.Part> imageList) {
+    public LiveData<Boolean> deleteComment(DeleteCommentBody deleteCommentBody) {
+        MutableLiveData<Boolean> data = new MutableLiveData<>();
+        apiService.deleteComment(deleteCommentBody).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: Comment Deleted");
+                    data.setValue(true);
+                } else {
+                    Log.d(TAG, "onResponse: Delete Comment Failed" + response.errorBody());
+                    data.setValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                data.setValue(false);
+                Log.d(TAG, "onFailure: Delete Comment Failed" + t.getMessage());
+            }
+        });
+        return data;
+    }
+
+    public LiveData<Boolean> updateComment(RequestBody text, RequestBody id) {
+        MutableLiveData<Boolean> data = new MutableLiveData<>();
+        apiService.updateComment(text, id).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    Log.d(TAG, "onResponse: Comment Update");
+                    data.setValue(true);
+                } else {
+                    Log.d(TAG, "onResponse: Update Comment Failed" + response.errorBody());
+                    data.setValue(false);
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                data.setValue(false);
+                Log.d(TAG, "onFailure: Update Comment Failed" + t.getMessage());
+            }
+        });
+        return data;
+    }
+
+    public LiveData<Boolean> isPostUpdated(RequestBody id, RequestBody postDescription, List<MultipartBody.Part> imageList) {
         MutableLiveData<Boolean> data = new MutableLiveData<>();
         apiService.updatePost(id, postDescription, imageList).enqueue(new Callback<ResponseBody>() {
             @Override

@@ -8,7 +8,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bloggappapi.R;
-import com.example.bloggappapi.UserPostBody;
+import com.example.bloggappapi.request.UserPostBody;
 import com.example.bloggappapi.adapters.PostImageAdapter;
 import com.example.bloggappapi.models.User;
 import com.example.bloggappapi.viewmodels.ProfileActivityViewModel;

@@ -29,8 +29,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.bloggappapi.DeleteBody;
-import com.example.bloggappapi.PostBody;
+import com.example.bloggappapi.request.DeleteBody;
+import com.example.bloggappapi.request.PostBody;
 import com.example.bloggappapi.models.Image;
 import com.example.bloggappapi.models.Post;
 import com.example.bloggappapi.R;
@@ -117,7 +117,10 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
     private void checkTimeout() {
         mainActivityViewModel.timeout().observe(this, isTimeout -> {
             if (isTimeout != null) {
-                if (isTimeout) fetchDataFromApi();
+                if (isTimeout) {
+                    Toast.makeText(this, "Time Out Refetching", Toast.LENGTH_SHORT).show();
+                    fetchDataFromApi();
+                }
             }
         });
     }

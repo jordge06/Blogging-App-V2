@@ -3,6 +3,8 @@ package com.example.bloggappapi.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,9 +21,18 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
 
     private List<Comment> commentList;
     private LayoutInflater layoutInflater;
+    private OnCommentItemClick onCommentItemClick;
 
     public CommentAdapter(List<Comment> commentList) {
         this.commentList = commentList;
+    }
+
+    public void setOnCommentItemClick(OnCommentItemClick onCommentItemClick) {
+        this.onCommentItemClick = onCommentItemClick;
+    }
+
+    public Comment getCommentByPos(int pos) {
+        return commentList.get(pos);
     }
 
     @NonNull
@@ -44,8 +55,6 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         String comment = commentList.get(position).getCommentText();
         String commentDisplay = comment.substring(0, 1).toUpperCase() + comment.substring(1);
         holder.txtComment.setText(commentDisplay);
-
-
     }
 
     @Override
@@ -53,10 +62,12 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
         return commentList.size();
     }
 
-    static class CommentViewHolder extends RecyclerView.ViewHolder {
+    class CommentViewHolder extends RecyclerView.ViewHolder {
 
         private ImageView imgProfile;
         private TextView txtUsername, txtComment;
+        private Button btnSave, btnCancel;
+        private EditText txtEditComment;
 
         public CommentViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -64,6 +75,17 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             imgProfile = itemView.findViewById(R.id.imgProfile);
             txtUsername = itemView.findViewById(R.id.txtUsername);
             txtComment = itemView.findViewById(R.id.txtComment);
+            btnSave = itemView.findViewById(R.id.btnSave);
+            btnCancel = itemView.findViewById(R.id.btnCancel);
+            txtEditComment = itemView.findViewById(R.id.txtEditComment);
+            ImageView btnOptions = itemView.findViewById(R.id.btnOptions);
+
+            btnOptions.setOnClickListener(view -> onCommentItemClick.onOptionClick(getAdapterPosition(),
+                    btnSave,
+                    btnCancel,
+                    txtEditComment,
+                    txtComment
+            ));
         }
 
         protected void setProfile(String url) {
@@ -73,5 +95,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     .error(R.drawable.ic_empty_profile)
                     .into(imgProfile);
         }
+    }
+
+    public interface OnCommentItemClick {
+        void onOptionClick(int pos, Button btnSave, Button btnCancel, EditText txtEditComment, TextView txtComment);
     }
 }

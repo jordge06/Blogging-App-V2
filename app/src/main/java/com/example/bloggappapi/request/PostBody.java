@@ -1,4 +1,4 @@
-package com.example.bloggappapi;
+package com.example.bloggappapi.request;
 
 public class PostBody {
 

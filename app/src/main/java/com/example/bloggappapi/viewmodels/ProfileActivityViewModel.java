@@ -4,7 +4,7 @@ import android.app.Application;
 import android.util.Log;
 
 import com.example.bloggappapi.models.Post;
-import com.example.bloggappapi.UserPostBody;
+import com.example.bloggappapi.request.UserPostBody;
 import com.example.bloggappapi.dao.UserDao;
 import com.example.bloggappapi.database.UserDatabase;
 import com.example.bloggappapi.models.User;
