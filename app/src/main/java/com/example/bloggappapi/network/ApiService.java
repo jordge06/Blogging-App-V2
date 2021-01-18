@@ -54,6 +54,12 @@ public interface ApiService {
                            @Part("postText") RequestBody postText,
                            @Part List<MultipartBody.Part> postImage);
 
+    @Multipart
+    @POST("posts/updatepost")
+    Call<ResponseBody> updatePost(@Part("postId") RequestBody postId,
+                                  @Part("postText") RequestBody postText,
+                                  @Part List<MultipartBody.Part> postImage);
+
     // Delete Post
     @POST("posts/deletepost")
     Call<ResponseBody> deletePost(@Body DeleteBody deleteBody);

@@ -31,6 +31,7 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.example.bloggappapi.DeleteBody;
 import com.example.bloggappapi.PostBody;
+import com.example.bloggappapi.models.Image;
 import com.example.bloggappapi.models.Post;
 import com.example.bloggappapi.R;
 import com.example.bloggappapi.adapters.PostAdapter;
@@ -376,12 +377,10 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
                 R.layout.bottom_sheet_layout,
                 findViewById(R.id.bottomSheet));
         sheetView.findViewById(R.id.actionUpdate).setOnClickListener(view -> {
-            ArrayList<String> imageList = new ArrayList<>();
-            for (int i = 0; i < post.getPostImage().size(); i++) {
-                imageList.add(post.getPostImage().get(i).getUrl());
-            }
+            ArrayList<Image> imageList = new ArrayList<>(post.getPostImage());
             Intent intent = new Intent(this, NewPostActivity.class);
-            intent.putStringArrayListExtra("imageList", imageList);
+            intent.putParcelableArrayListExtra("imageList", imageList);
+            intent.putExtra("postId", post.getId());
             intent.putExtra("description", post.getPostText());
             startActivity(intent);
             bottomSheetDialog.dismiss();

@@ -25,7 +25,19 @@ public class NewPostViewModel extends AndroidViewModel {
     }
 
     public LiveData<Boolean> addPost(RequestBody id, RequestBody postDescription, List<MultipartBody.Part> imageList) {
-        return postRepository.addPost(id, postDescription, imageList);
+        if (postRepository.addPost(id, postDescription, imageList) != null)
+            return postRepository.addPost(id, postDescription, imageList);
+        else {
+            return new MutableLiveData<>(false);
+        }
+    }
+
+    public LiveData<Boolean> postUpdated(RequestBody id, RequestBody postDescription, List<MultipartBody.Part> imageList) {
+        if (postRepository.isUpdated(id, postDescription, imageList) != null)
+            return postRepository.isUpdated(id, postDescription, imageList);
+        else {
+            return new MutableLiveData<>(false);
+        }
     }
 
 }

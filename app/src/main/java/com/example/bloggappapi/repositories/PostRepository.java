@@ -34,7 +34,6 @@ public class PostRepository {
     private MutableLiveData<Boolean> networkStatus;
     private MutableLiveData<Boolean> isDeleted;
     private MutableLiveData<Boolean> timeout;
-    private List<Post> postList;
 
     public PostRepository(Context context) {
         apiService = RetrofitInstance.getRetrofit(context).create(ApiService.class);
@@ -42,7 +41,6 @@ public class PostRepository {
         networkStatus = new MutableLiveData<>();
         isDeleted = new MutableLiveData<>();
         timeout = new MutableLiveData<>();
-        postList = new ArrayList<>();
     }
 
     public LiveData<Boolean> getNetworkStatus() {
@@ -173,5 +171,26 @@ public class PostRepository {
 
     public LiveData<Boolean> isPostDeleted() {
         return isDeleted;
+    }
+
+    public LiveData<Boolean> isUpdated(RequestBody id, RequestBody postDescription, List<MultipartBody.Part> imageList) {
+        MutableLiveData<Boolean> data = new MutableLiveData<>();
+        apiService.updatePost(id, postDescription, imageList).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    data.setValue(true);
+                } else {
+                    data.setValue(false);
+                    Log.d(TAG, "onResponse: Update Response Not Successful" + response.errorBody());
+                }
+            }
+            @Override
+            public void onFailure(@NonNull Call<ResponseBody> call, @NonNull Throwable t) {
+                data.setValue(false);
+                Log.d(TAG, "onFailure: Update Failure" + t.getMessage());
+            }
+        });
+        return data;
     }
 }
