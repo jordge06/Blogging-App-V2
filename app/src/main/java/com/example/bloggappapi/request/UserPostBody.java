@@ -7,7 +7,11 @@ public class UserPostBody {
     @SerializedName("postedBy")
     private String userId;
 
-    public UserPostBody(String userId) {
+    @SerializedName("page")
+    private int page;
+
+    public UserPostBody(String userId, int page) {
         this.userId = userId;
+        this.page = page;
     }
 }

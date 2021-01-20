@@ -60,7 +60,8 @@ public class PostAdapter extends RecyclerView.Adapter {
         if (viewType == NORMAL_VIEW) {
             View view = layoutInflater.inflate(R.layout.item_container_posts, parent, false);
             return new PostViewHolder(view);
-        } return new MultipleImageViewHolder(
+        }
+        return new MultipleImageViewHolder(
                 layoutInflater.inflate(R.layout.item_container_post_multiple_images,
                         parent,
                         false));
@@ -129,7 +130,7 @@ public class PostAdapter extends RecyclerView.Adapter {
     class PostViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView imgProfile;
-        private final ImageView imgPost;
+        private final ImageView imgPost, btnOptions, btnSendComment;
         private final TextView txtUsername, txtPostDescription;
         private final EditText txtComment;
         private final CardView layout;
@@ -141,8 +142,8 @@ public class PostAdapter extends RecyclerView.Adapter {
             imgProfile = itemView.findViewById(R.id.imgProfile);
             ImageView imgActiveProfile = itemView.findViewById(R.id.imgActiveProfile);
             txtComment = itemView.findViewById(R.id.txtComment);
-            ImageView btnOptions = itemView.findViewById(R.id.btnOptions);
-            ImageView btnSendComment = itemView.findViewById(R.id.btnSendComment);
+            btnOptions = itemView.findViewById(R.id.btnOptions);
+            btnSendComment = itemView.findViewById(R.id.btnSendComment);
             txtUsername = itemView.findViewById(R.id.txtUsername);
             txtPostDescription = itemView.findViewById(R.id.txtPostDescription);
             layout = itemView.findViewById(R.id.layout);
@@ -156,6 +157,7 @@ public class PostAdapter extends RecyclerView.Adapter {
             imgPost.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
             txtPostDescription.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
             imgProfile.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
+            txtUsername.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
 
             Glide.with(imgActiveProfile.getContext())
                     .load(currentUserProfile)
@@ -220,6 +222,7 @@ public class PostAdapter extends RecyclerView.Adapter {
             imgPost.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
             txtPostDescription.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
             imgProfile.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
+            txtUsername.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
 
             Glide.with(imgActiveProfile.getContext())
                     .load(currentUserProfile)

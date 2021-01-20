@@ -8,8 +8,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.bloggappapi.R;
+import com.example.bloggappapi.adapters.UserPostsAdapter;
 import com.example.bloggappapi.request.UserPostBody;
-import com.example.bloggappapi.adapters.PostImageAdapter;
 import com.example.bloggappapi.models.User;
 import com.example.bloggappapi.viewmodels.ProfileActivityViewModel;
 
@@ -18,6 +18,7 @@ import java.util.List;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.RecyclerView;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -28,20 +29,26 @@ public class ProfileActivity extends AppCompatActivity {
 
     private static final String TAG = "ProfileActivity";
     private User user;
-    private PostImageAdapter postImageAdapter;
+    private UserPostsAdapter userPostsAdapter;
     private List<String> postImages = new ArrayList<>();
     private ProfileActivityViewModel profileActivityViewModel;
     private ImageView imgProfile;
-    private TextView txtName, txtUsername;
+    private TextView txtName, txtUsername, txtAge, txtTotalPosts;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+
         imgProfile = findViewById(R.id.imgProfile);
         txtName = findViewById(R.id.txtName);
         txtUsername = findViewById(R.id.txtUsername);
+        txtAge = findViewById(R.id.txtAge);
+        txtTotalPosts = findViewById(R.id.txtTotalPosts);
 
         profileActivityViewModel = new ViewModelProvider(this).get(ProfileActivityViewModel.class);
 
@@ -68,17 +75,19 @@ public class ProfileActivity extends AppCompatActivity {
                 .circleCrop()
                 .into(imgProfile);
 
-        String fullName = user.getFirstName() + " " + user.getLastName();
+        String fullName =  user.getFirstName() + " " + user.getLastName();
         txtName.setText(fullName);
-        txtUsername.setText(user.getUsername());
+        String username = "@" + user.getUsername();
+        txtUsername.setText(username);
+        String age = String.valueOf(user.getAge()).toUpperCase() + " years old";
+        txtAge.setText(age);
     }
 
     private void setRecycler() {
         RecyclerView rvPosts = findViewById(R.id.rvPosts);
         rvPosts.setHasFixedSize(true);
-        postImageAdapter = new PostImageAdapter(postImages, this);
-        rvPosts.setAdapter(postImageAdapter);
-
+        userPostsAdapter = new UserPostsAdapter(postImages);
+        rvPosts.setAdapter(userPostsAdapter);
     }
 
     // if the user is login get user data from database cache
@@ -97,21 +106,32 @@ public class ProfileActivity extends AppCompatActivity {
     // get users post by their user id
     private void getUserPost() {
         try {
-            UserPostBody userPostBody = new UserPostBody(user.getUserId());
-            profileActivityViewModel.getPostByUser(userPostBody).observe(this, postsResponseList -> {
-                if (postsResponseList != null) {
-                    for (int i = 0; i < postsResponseList.size(); i++) {
-                        if (postsResponseList.get(i).getPostImage().size() > 0) {
-                            postImages.add(postsResponseList.get(i).getPostImage().get(0).getUrl());
-                            postImageAdapter.notifyDataSetChanged();
+            UserPostBody userPostBody = new UserPostBody(user.getUserId(), 0);
+            profileActivityViewModel.getPostByUser(userPostBody).observe(this, postResponse -> {
+                if (postResponse != null) {
+                    if (postResponse.getPostList().size() > 0) {
+                        txtTotalPosts.setText(total(postResponse.getPostList().size()));
+                        for (int i = 0; i < postResponse.getPostList().size(); i++) {
+                            if (postResponse.getPostList().get(i).getPostImage().size() > 0) {
+                                postImages.add(postResponse.getPostList().get(i).getPostImage().get(0).getUrl());
+                            } else {
+                                postImages.add("");
+                            }
+                            userPostsAdapter.notifyDataSetChanged();
                         }
+                    } else {
+                        String text = postResponse.getPostList().size() + " Post";
+                        txtTotalPosts.setText(text);
                     }
-                } else Toast.makeText(this, "Null", Toast.LENGTH_SHORT).show();
+                } else Log.d(TAG, "getUserPost: Null List");
             });
         } catch (Exception e) {
             Log.d(TAG, "getUserPost: " + e.getMessage());
         }
+    }
 
+    private String total(int size) {
+        return size == 1 ? (size + " Post") : (size + " Posts");
     }
 
 

@@ -9,17 +9,18 @@ import com.example.bloggappapi.dao.UserDao;
 import com.example.bloggappapi.database.UserDatabase;
 import com.example.bloggappapi.models.User;
 import com.example.bloggappapi.repositories.PostRepository;
+import com.example.bloggappapi.response.PostResponse;
 
 import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
 import io.reactivex.Flowable;
 
 public class ProfileActivityViewModel extends AndroidViewModel {
 
-    private static final String TAG = "ProfileActivityViewMode";
     private UserDao userDao;
     private PostRepository postRepository;
 
@@ -36,14 +37,10 @@ public class ProfileActivityViewModel extends AndroidViewModel {
         return userDao.getUser();
     }
 
-    public LiveData<List<Post>> getPostByUser(UserPostBody userPostBody) {
-        try {
-            Log.d(TAG, "getPostByUser: Successful");
+    public LiveData<PostResponse> getPostByUser(UserPostBody userPostBody) {
+        if (postRepository.getPostByUser(userPostBody) != null) {
             return postRepository.getPostByUser(userPostBody);
-        } catch (Exception e) {
-            Log.d(TAG, "getPostByUser: " + e.getMessage());
-            return null;
-        }
+        }   return new MutableLiveData<>(null);
     }
 
 

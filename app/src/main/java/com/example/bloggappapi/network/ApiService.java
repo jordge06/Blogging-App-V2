@@ -50,7 +50,7 @@ public interface ApiService {
 
     // Get post by User
     @POST("posts/userpost")
-    Call<List<Post>> getUserPosts(@Body UserPostBody userPostBody);
+    Call<PostResponse> getUserPosts(@Body UserPostBody userPostBody);
 
     // Submit Post with Image/s
     @Multipart

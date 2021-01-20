@@ -30,14 +30,12 @@ public class PostRepository {
 
     private static final String TAG = "PostRepository";
     private ApiService apiService;
-    private ApiService mainService;
     private MutableLiveData<Boolean> networkStatus;
     private MutableLiveData<Boolean> isDeleted;
     private MutableLiveData<Boolean> timeout;
 
     public PostRepository(Context context) {
         apiService = RetrofitInstance.getRetrofit(context).create(ApiService.class);
-        mainService = RetrofitInstance.getRetrofit().create(ApiService.class);
         networkStatus = new MutableLiveData<>();
         isDeleted = new MutableLiveData<>();
         timeout = new MutableLiveData<>();
@@ -83,7 +81,7 @@ public class PostRepository {
 
     public LiveData<Post> sendComment(RequestBody id, RequestBody postId, RequestBody commentText) {
         MutableLiveData<Post> data = new MutableLiveData<>();
-        mainService.submitComment(id, postId, commentText).enqueue(new Callback<Post>() {
+        apiService.submitComment(id, postId, commentText).enqueue(new Callback<Post>() {
             @Override
             public void onResponse(@NonNull Call<Post> call, @NonNull Response<Post> response) {
                 if (response.isSuccessful()) {
@@ -103,11 +101,11 @@ public class PostRepository {
         return data;
     }
 
-    public LiveData<List<Post>> getPostByUser(UserPostBody userId) {
-        MutableLiveData<List<Post>> data = new MutableLiveData<>();
-        mainService.getUserPosts(userId).enqueue(new Callback<List<Post>>() {
+    public LiveData<PostResponse> getPostByUser(UserPostBody userId) {
+        MutableLiveData<PostResponse> data = new MutableLiveData<>();
+        apiService.getUserPosts(userId).enqueue(new Callback<PostResponse>() {
             @Override
-            public void onResponse(@NonNull Call<List<Post>> call, @NonNull Response<List<Post>> response) {
+            public void onResponse(@NonNull Call<PostResponse> call, @NonNull Response<PostResponse> response) {
                 if (response.isSuccessful()) {
                     Log.d(TAG, "onResponse: Success");
                     data.setValue(response.body());
@@ -118,7 +116,7 @@ public class PostRepository {
             }
 
             @Override
-            public void onFailure(@NonNull Call<List<Post>> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PostResponse> call, @NonNull Throwable t) {
                 Log.d(TAG, "onFailure: " + t.getMessage());
             }
         });
@@ -150,7 +148,7 @@ public class PostRepository {
     }
 
     public void deletePost(DeleteBody deleteBody) {
-        mainService.deletePost(deleteBody).enqueue(new Callback<ResponseBody>() {
+        apiService.deletePost(deleteBody).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(@NonNull Call<ResponseBody> call, @NonNull Response<ResponseBody> response) {
                 if (response.isSuccessful()) {

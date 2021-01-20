@@ -29,6 +29,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.ethanhua.skeleton.Skeleton;
+import com.ethanhua.skeleton.SkeletonScreen;
 import com.example.bloggappapi.Server;
 import com.example.bloggappapi.request.DeleteBody;
 import com.example.bloggappapi.request.PostBody;
@@ -135,7 +137,6 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
             }
         });
     }
-
 
     private void getRowCount() {
         CompositeDisposable compositeDisposable = new CompositeDisposable();

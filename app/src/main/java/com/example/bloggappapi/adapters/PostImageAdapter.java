@@ -54,7 +54,7 @@ public class PostImageAdapter extends RecyclerView.Adapter {
                     false
             ));
         }
-        View view = layoutInflater.inflate(R.layout.item_container_post_image, parent, false);
+        View view = layoutInflater.inflate(R.layout.item_container_post_thumbnail, parent, false);
         return new MyViewHolder(view);
     }
 

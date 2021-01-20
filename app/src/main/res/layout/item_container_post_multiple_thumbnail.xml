@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/imageHolder"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/_60sdp"
+    android:layout_marginStart="8dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginEnd="8dp">
+
+    <ImageView
+        android:id="@+id/imgPost"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+        app:layout_constraintEnd_toStartOf="@id/verticalSeparator"
+        app:layout_constraintStart_toStartOf="@id/imageHolder"
+        app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+    <ImageView
+        android:id="@+id/imgPost2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toTopOf="@id/horizontalSeparator"
+        app:layout_constraintEnd_toEndOf="@id/imageHolder"
+        app:layout_constraintStart_toEndOf="@id/verticalSeparator"
+        app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+    <ImageView
+        android:id="@+id/imgPost3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/app_name"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+        app:layout_constraintEnd_toEndOf="@id/imageHolder"
+        app:layout_constraintStart_toEndOf="@id/verticalSeparator"
+        app:layout_constraintTop_toBottomOf="@id/horizontalSeparator" />
+
+    <LinearLayout
+        android:id="@+id/horizontalSeparator"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+        app:layout_constraintEnd_toEndOf="@id/imageHolder"
+        app:layout_constraintStart_toStartOf="@id/imageHolder"
+        app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+    <LinearLayout
+        android:id="@+id/verticalSeparator"
+        android:layout_width="1dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+        app:layout_constraintEnd_toEndOf="@id/imageHolder"
+        app:layout_constraintStart_toStartOf="@id/imageHolder"
+        app:layout_constraintTop_toTopOf="@id/imageHolder" />
+
+    <TextView
+        android:id="@+id/txtNumberOfImages"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@drawable/background_fading_edge"
+        android:fontFamily="@font/open_sans_condensed_bold"
+        android:gravity="center"
+        android:textColor="@android:color/white"
+        android:textSize="26sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/imageHolder"
+        app:layout_constraintEnd_toEndOf="@id/imageHolder"
+        app:layout_constraintStart_toEndOf="@id/verticalSeparator"
+        app:layout_constraintTop_toBottomOf="@id/horizontalSeparator" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

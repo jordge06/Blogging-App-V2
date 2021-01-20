@@ -93,7 +93,7 @@
                     app:layout_constraintStart_toStartOf="@id/holder2"
                     app:layout_constraintTop_toTopOf="@id/holder2"
                     app:spanCount="4"
-                    tools:listitem="@layout/item_container_post_image" />
+                    tools:listitem="@layout/item_container_post_thumbnail" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

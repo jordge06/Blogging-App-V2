@@ -69,4 +69,8 @@ dependencies {
 
     implementation 'com.github.nkzawa:socket.io-client:0.6.0'
 
+    // Shimmer Loading
+    implementation 'com.ethanhua:skeleton:1.1.2'
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
+
 }
