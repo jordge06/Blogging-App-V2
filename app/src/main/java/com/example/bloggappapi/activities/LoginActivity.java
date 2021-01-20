@@ -20,6 +20,7 @@ import com.example.bloggappapi.models.User;
 import com.example.bloggappapi.viewmodels.UserViewModel;
 import com.google.android.material.snackbar.Snackbar;
 
+
 public class LoginActivity extends AppCompatActivity {
 
     private static final String TAG = "LoginActivity";
@@ -27,6 +28,9 @@ public class LoginActivity extends AppCompatActivity {
     private UserViewModel userViewModel;
     private ConstraintLayout parentLayout;
     private Button btnLogin;
+
+//    private String mEmail;
+//    private Socket socket;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,11 +46,43 @@ public class LoginActivity extends AppCompatActivity {
         parentLayout = findViewById(R.id.parentLayout);
         btnLogin = findViewById(R.id.btnLogin);
         userViewModel = new ViewModelProvider(this).get(UserViewModel.class);
+        //Server server = (Server) getApplication();
+
+        //socket = server.getSocket();
+        //socket.connect();
 
         btnLogin.setOnClickListener(view -> loginUser());
+        //socket.on("welcome", onLogin);
 
-        findViewById(R.id.btnOpenRegister).setOnClickListener(view -> startActivity(new Intent(this, RegisterActivity.class)));
+        findViewById(R.id.btnOpenRegister).setOnClickListener(view -> startActivity(new Intent(this,
+                RegisterActivity.class)));
     }
+
+
+//    private Emitter.Listener onLogin = args -> {
+//        JSONObject data = (JSONObject) args[0];
+//        Log.d(TAG, "call: " + args[0]);
+//        int numUsers;
+//        try {
+//            numUsers = data.getInt("numUsers");
+//            Log.d(TAG, "call: " + data);
+//        } catch (JSONException e) {
+//            return;
+//        }
+//
+//        Intent intent = new Intent(this, MainActivity.class);
+//        intent.putExtra("numUsers", numUsers);
+//        intent.putExtra("email", mEmail);
+//        startActivity(intent);
+//
+//        //startActivity(new Intent(this, MainActivity.class));
+//
+////            Intent intent = new Intent();
+////            intent.putExtra("username", mEmail);
+////            intent.putExtra("numUsers", numUsers);
+////            setResult(RESULT_OK, intent);
+////            finish();
+//    };
 
     private void loginUser() {
         String email = txtEmail.getText().toString();
@@ -59,6 +95,8 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
+//        mEmail = email;
+//        socket.emit("add user", email);
         userViewModel.loginUser(new SingleUser(email, pass)).observe(this, user -> {
             if (user != null) {
                 Log.d(TAG, "loginUser: Login Successful");

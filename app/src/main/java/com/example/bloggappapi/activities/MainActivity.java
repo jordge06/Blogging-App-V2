@@ -29,6 +29,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
+import com.example.bloggappapi.Server;
 import com.example.bloggappapi.request.DeleteBody;
 import com.example.bloggappapi.request.PostBody;
 import com.example.bloggappapi.models.Image;
@@ -38,8 +39,13 @@ import com.example.bloggappapi.adapters.PostAdapter;
 import com.example.bloggappapi.models.Comment;
 import com.example.bloggappapi.models.User;
 import com.example.bloggappapi.viewmodels.MainActivityViewModel;
+import com.github.nkzawa.emitter.Emitter;
+import com.github.nkzawa.socketio.client.Socket;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -54,6 +60,8 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
     private List<Post> postList = new ArrayList<>();
     private ConstraintLayout layout;
     private int pageNumber = 0;
+
+    //private Socket socket;
 
     // instance
     private PostAdapter postAdapter;
@@ -70,6 +78,9 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
 
+//        Server server = (Server) getApplication();
+//        socket = server.getSocket();
+//        socket.connect();
         mainActivityViewModel = new ViewModelProvider(MainActivity.this).get(MainActivityViewModel.class);
         layout = findViewById(R.id.layout);
 

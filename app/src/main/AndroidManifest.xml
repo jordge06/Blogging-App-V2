@@ -16,6 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
+        android:name=".Server"
         tools:targetApi="m">
         <activity android:name=".activities.CommentActivity"/>
         <activity android:name=".activities.ProfileActivity"/>
