@@ -6,4 +6,8 @@
 
     <color name="redButton">#FB623F</color>
     <color name="colorBackground">#1A1D22</color>
+    <color name="yellow">#F0C906</color>
+
+    <color name="backgroundShimmer">#383B43</color>
+    <color name="shimmer">#7A7E83</color>
 </resources>

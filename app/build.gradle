@@ -19,7 +19,7 @@ android {
     }
 
     buildFeatures {
-        dataBinding false
+        dataBinding true
     }
 
     buildTypes {
@@ -33,7 +33,6 @@ android {
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.appcompat:appcompat-resources:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.cardview:cardview:1.0.0'

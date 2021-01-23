@@ -31,7 +31,6 @@ import com.bumptech.glide.request.target.CustomTarget;
 import com.bumptech.glide.request.transition.Transition;
 import com.ethanhua.skeleton.Skeleton;
 import com.ethanhua.skeleton.SkeletonScreen;
-import com.example.bloggappapi.Server;
 import com.example.bloggappapi.request.DeleteBody;
 import com.example.bloggappapi.request.PostBody;
 import com.example.bloggappapi.models.Image;
@@ -40,14 +39,8 @@ import com.example.bloggappapi.R;
 import com.example.bloggappapi.adapters.PostAdapter;
 import com.example.bloggappapi.models.Comment;
 import com.example.bloggappapi.models.User;
-import com.example.bloggappapi.viewmodels.MainActivityViewModel;
-import com.github.nkzawa.emitter.Emitter;
-import com.github.nkzawa.socketio.client.Socket;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.example.bloggappapi.viewmodels.MainActivityViewModel;import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
     private String userId;
     private String profileUrl;
     private User user;
-    private List<Post> postList = new ArrayList<>();
+    private final List<Post> postList = new ArrayList<>();
     private ConstraintLayout layout;
     private int pageNumber = 0;
 
@@ -70,6 +63,8 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
     private MainActivityViewModel mainActivityViewModel;
 
     private RecyclerView rvPosts;
+
+    private SkeletonScreen screen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +84,12 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
         // Get User from Local Database
         getUser();
         setRecycler();
+
+        screen = Skeleton.bind(rvPosts)
+                .adapter(postAdapter)
+                .load(R.layout.item_container_posts)
+                .color(R.color.backgroundShimmer)
+                .show();
 
         // Fetch data from Network through API
         fetchDataFromApi();
@@ -201,7 +202,9 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
 
     private void setRecycler() {
         rvPosts = findViewById(R.id.rvPosts);
-        postAdapter = new PostAdapter(postList, profileUrl);
+        postAdapter = new PostAdapter(postList);
+        postAdapter.setCurrentUserProfile(profileUrl);
+        postAdapter.setLoading(true);
         rvPosts.setHasFixedSize(true);
         rvPosts.setAdapter(postAdapter);
         postAdapter.setClickListener(this);
@@ -210,8 +213,11 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
     private void fetchDataFromApi() {
         PostBody postBody = new PostBody();
         postBody.setPage(pageNumber);
+        postAdapter.setLoading(true);
         mainActivityViewModel.getPosts(postBody).observe(this, postResponses -> {
             if (postResponses != null) {
+                screen.hide();
+                postAdapter.setLoading(false);
                 if (postResponses.getPostList().size() > 0) {
                     int oldSize = postList.size();
                     postList.addAll(postResponses.getPostList());
@@ -411,12 +417,5 @@ public class MainActivity extends AppCompatActivity implements PostAdapter.Click
         });
         bottomSheetDialog.setContentView(sheetView);
         bottomSheetDialog.show();
-    }
-
-    @Override
-    public void removeItemWithNoUser(int pos) {
-        //postList.remove(pos);
-//        postAdapter.notifyItemRemoved(pos);
-//        postAdapter.notifyItemRangeChanged(pos, postAdapter.getItemCount());
     }
 }

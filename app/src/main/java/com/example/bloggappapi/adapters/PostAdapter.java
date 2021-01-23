@@ -5,11 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.bloggappapi.databinding.ItemContainerPostMultipleImagesBinding;
+import com.example.bloggappapi.databinding.ItemContainerPostsBinding;
 import com.example.bloggappapi.models.Post;
 import com.example.bloggappapi.R;
 import com.example.bloggappapi.models.Image;
@@ -18,27 +17,33 @@ import com.example.bloggappapi.models.User;
 import java.util.List;
 
 import androidx.annotation.NonNull;
-import androidx.cardview.widget.CardView;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class PostAdapter extends RecyclerView.Adapter {
 
-    private List<Post> postList;
+    private final List<Post> postList;
     private LayoutInflater layoutInflater;
     private ClickListener clickListener;
     private String currentUserProfile;
     private static final int NORMAL_VIEW = 0;
     private static final int MULTIPLE_VIEW = 1;
 
+    private boolean isLoading;
+
     public void setClickListener(ClickListener clickListener) {
         this.clickListener = clickListener;
+    }
+
+    public void setLoading(boolean loading) {
+        isLoading = loading;
     }
 
     public void setCurrentUserProfile(String currentUserProfile) {
         this.currentUserProfile = currentUserProfile;
     }
 
-    public PostAdapter(List<Post> postList, String currentUserProfile) {
+    public PostAdapter(List<Post> postList) {
         this.postList = postList;
         this.currentUserProfile = currentUserProfile;
     }
@@ -58,13 +63,19 @@ public class PostAdapter extends RecyclerView.Adapter {
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         if (layoutInflater == null) layoutInflater = LayoutInflater.from(parent.getContext());
         if (viewType == NORMAL_VIEW) {
-            View view = layoutInflater.inflate(R.layout.item_container_posts, parent, false);
-            return new PostViewHolder(view);
+            ItemContainerPostsBinding itemContainerPostsBinding = DataBindingUtil
+                    .inflate(layoutInflater,
+                            R.layout.item_container_posts,
+                            parent,
+                            false);
+            return new PostViewHolder(itemContainerPostsBinding);
         }
-        return new MultipleImageViewHolder(
-                layoutInflater.inflate(R.layout.item_container_post_multiple_images,
-                        parent,
-                        false));
+        return new MultipleImageViewHolder(DataBindingUtil.inflate(
+                layoutInflater,
+                R.layout.item_container_post_multiple_images,
+                parent,
+                false
+        ));
     }
 
     @Override
@@ -72,48 +83,21 @@ public class PostAdapter extends RecyclerView.Adapter {
         int imageSize = postList.get(position).getPostImage().size();
         User user = postList.get(position).getPostedBy();
         if (imageSize > 1) {
-            MultipleImageViewHolder mHolder = (MultipleImageViewHolder) holder;
             if (user != null) {
                 try {
-                    mHolder.setPostImage(postList.get(position).getPostImage());
-                    // Set Profile Image of the User who posted the post
-                    String profileUrl = postList.get(position).getPostedBy().getAvatar().getUrl();
-                    mHolder.setProfileImage(profileUrl);
-                    // Set the username of the User who posted the post
-                    mHolder.txtUsername.setText(postList.get(position).getPostedBy().getUsername());
-                    // Set the post caption
-                    String text = postList.get(position).getPostText() + "";
-                    mHolder.txtPostDescription.setText(text);
+                    ((MultipleImageViewHolder) holder).bindData(postList.get(position), currentUserProfile);
+                    ((MultipleImageViewHolder) holder).setPostImage(postList.get(position).getPostImage());
                 } catch (Exception e) {
                     Log.d("postAdapter", "onBindViewHolder: " + e.getMessage());
                 }
-            } //else //mHolder.layout.setVisibility(View.GONE);
+            }
         } else {
-            PostViewHolder mHolder = (PostViewHolder) holder;
             if (user != null) {
-                mHolder.layout.setVisibility(View.VISIBLE);
                 try {
-                    // Check first if posts has image url/s
-                    if (imageSize > 0) {
-                        mHolder.imgPost.setVisibility(View.VISIBLE);
-                        mHolder.setPostImage(postList.get(position).getPostImage().get(0).getUrl());
-                    } else {
-                        mHolder.imgPost.setVisibility(View.GONE);
-                    }
-                    // Set Profile Image of the User who posted the post
-                    String profileUrl = postList.get(position).getPostedBy().getAvatar().getUrl();
-                    mHolder.setProfileImage(profileUrl);
-                    // Set the username of the User who posted the post
-                    mHolder.txtUsername.setText(postList.get(position).getPostedBy().getUsername());
-                    // Set the post caption
-                    String text = postList.get(position).getPostText() + "";
-                    mHolder.txtPostDescription.setText(text);
-
+                    ((PostViewHolder) holder).binData(postList.get(position), currentUserProfile, isLoading);
                 } catch (Exception e) {
                     Log.d("postAdapter", "onBindViewHolder: " + e.getMessage());
                 }
-            } else {
-                clickListener.removeItemWithNoUser(position);
             }
         }
     }
@@ -129,147 +113,78 @@ public class PostAdapter extends RecyclerView.Adapter {
 
     class PostViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView imgProfile;
-        private final ImageView imgPost, btnOptions, btnSendComment;
-        private final TextView txtUsername, txtPostDescription;
-        private final EditText txtComment;
-        private final CardView layout;
+        private final ItemContainerPostsBinding itemContainerPostsBinding;
 
-        public PostViewHolder(@NonNull View itemView) {
-            super(itemView);
+        public PostViewHolder(@NonNull ItemContainerPostsBinding itemContainerPostsBinding) {
+            super(itemContainerPostsBinding.getRoot());
+            this.itemContainerPostsBinding = itemContainerPostsBinding;
 
-            imgPost = itemView.findViewById(R.id.imgPost);
-            imgProfile = itemView.findViewById(R.id.imgProfile);
-            ImageView imgActiveProfile = itemView.findViewById(R.id.imgActiveProfile);
-            txtComment = itemView.findViewById(R.id.txtComment);
-            btnOptions = itemView.findViewById(R.id.btnOptions);
-            btnSendComment = itemView.findViewById(R.id.btnSendComment);
-            txtUsername = itemView.findViewById(R.id.txtUsername);
-            txtPostDescription = itemView.findViewById(R.id.txtPostDescription);
-            layout = itemView.findViewById(R.id.layout);
-
-            btnOptions.setOnClickListener(view -> clickListener.onOptionClick(getAdapterPosition()));
-            btnSendComment.setOnClickListener(view -> {
-                String comment = txtComment.getText().toString();
-                clickListener.onCommentSend(comment, txtComment, getAdapterPosition());
+            itemContainerPostsBinding.btnOptions.setOnClickListener(view -> clickListener.onOptionClick(getAdapterPosition()));
+            itemContainerPostsBinding.btnSendComment.setOnClickListener(view -> {
+                String comment = itemContainerPostsBinding.txtComment.getText().toString();
+                clickListener.onCommentSend(comment, itemContainerPostsBinding.txtComment, getAdapterPosition());
             });
 
-            imgPost.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
-            txtPostDescription.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
-            imgProfile.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
-            txtUsername.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
-
-            Glide.with(imgActiveProfile.getContext())
-                    .load(currentUserProfile)
-                    .error(R.drawable.ic_empty_profile)
-                    .circleCrop()
-                    .into(imgActiveProfile);
+            itemContainerPostsBinding.imgPost.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
+            itemContainerPostsBinding.txtPostDescription.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
+            itemContainerPostsBinding.imgProfile.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
+            itemContainerPostsBinding.txtUsername.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
         }
 
-        protected void setPostImage(String url) {
-            if (url != null) {
-                if (!url.isEmpty()) {
-                    Glide.with(imgPost.getContext()).load(url).into(imgPost);
-                }
-            } else imgPost.setVisibility(View.GONE);
+        protected void binData(Post post, String string, boolean loading) {
+            itemContainerPostsBinding.setPost(post);
+            itemContainerPostsBinding.setIsLoading(loading);
+            itemContainerPostsBinding.setCurrentUser(string);
+            itemContainerPostsBinding.executePendingBindings();
         }
 
-        protected void setProfileImage(String url) {
-            if (url != null) {
-                if (!url.isEmpty()) {
-                    Glide.with(imgProfile.getContext())
-                            .load(url)
-                            .circleCrop()
-                            .error(R.drawable.ic_empty_profile)
-                            .into(imgProfile);
-
-                } else imgProfile.setImageResource(R.drawable.ic_empty_profile);
-            } else imgProfile.setImageResource(R.drawable.ic_empty_profile);
-
-        }
     }
 
     class MultipleImageViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageView imgProfile;
-        private final ImageView imgPost, imgPost2, imgPost3;
-        private final TextView txtUsername, txtPostDescription, txtNumberOfImages;
-        private final EditText txtComment;
-        private final LinearLayout horizontalSeparator;
+        private final ItemContainerPostMultipleImagesBinding itemContainerPostMultipleImagesBinding;
 
-        public MultipleImageViewHolder(@NonNull View itemView) {
-            super(itemView);
+        public MultipleImageViewHolder(@NonNull ItemContainerPostMultipleImagesBinding itemContainerPostMultipleImagesBinding) {
+            super(itemContainerPostMultipleImagesBinding.getRoot());
+            this.itemContainerPostMultipleImagesBinding = itemContainerPostMultipleImagesBinding;
 
-            imgPost = itemView.findViewById(R.id.imgPost);
-            imgPost2 = itemView.findViewById(R.id.imgPost2);
-            imgPost3 = itemView.findViewById(R.id.imgPost3);
-            imgProfile = itemView.findViewById(R.id.imgProfile);
-            ImageView imgActiveProfile = itemView.findViewById(R.id.imgActiveProfile);
-            txtComment = itemView.findViewById(R.id.txtComment);
-            txtNumberOfImages = itemView.findViewById(R.id.txtNumberOfImages);
-            ImageView btnOptions = itemView.findViewById(R.id.btnOptions);
-            ImageView btnSendComment = itemView.findViewById(R.id.btnSendComment);
-            txtUsername = itemView.findViewById(R.id.txtUsername);
-            txtPostDescription = itemView.findViewById(R.id.txtPostDescription);
-            horizontalSeparator = itemView.findViewById(R.id.horizontalSeparator);
-
-            btnOptions.setOnClickListener(view -> clickListener.onOptionClick(getAdapterPosition()));
-            btnSendComment.setOnClickListener(view -> {
-                String comment = txtComment.getText().toString();
-                clickListener.onCommentSend(comment, txtComment, getAdapterPosition());
+            itemContainerPostMultipleImagesBinding.btnOptions.setOnClickListener(view -> clickListener.onOptionClick(getAdapterPosition()));
+            itemContainerPostMultipleImagesBinding.btnSendComment.setOnClickListener(view -> {
+                String comment = itemContainerPostMultipleImagesBinding.txtComment.getText().toString();
+                clickListener.onCommentSend(comment, itemContainerPostMultipleImagesBinding.txtComment, getAdapterPosition());
             });
 
-            imgPost.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
-            txtPostDescription.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
-            imgProfile.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
-            txtUsername.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
+            itemContainerPostMultipleImagesBinding.imgPost.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
+            itemContainerPostMultipleImagesBinding.txtPostDescription.setOnClickListener(view -> clickListener.openCommentSection(getAdapterPosition()));
+            itemContainerPostMultipleImagesBinding.imgProfile.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
+            itemContainerPostMultipleImagesBinding.txtUsername.setOnClickListener(view -> clickListener.onProfileClick(getAdapterPosition()));
 
-            Glide.with(imgActiveProfile.getContext())
-                    .load(currentUserProfile)
-                    .error(R.drawable.ic_empty_profile)
-                    .circleCrop()
-                    .into(imgActiveProfile);
+        }
+
+        protected void bindData(Post post, String string) {
+            itemContainerPostMultipleImagesBinding.setPost(post);
+            itemContainerPostMultipleImagesBinding.setCurrentUser(string);
+            itemContainerPostMultipleImagesBinding.executePendingBindings();
         }
 
         protected void setPostImage(List<Image> urlList) {
             if (urlList != null) {
                 if (urlList.size() < 3) {
-                    Glide.with(imgPost.getContext()).load(urlList.get(0).getUrl()).into(imgPost);
-                    Glide.with(imgPost.getContext()).load(urlList.get(1).getUrl()).into(imgPost2);
-                    imgPost3.setVisibility(View.GONE);
-                    horizontalSeparator.setVisibility(View.GONE);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(0).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(1).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost2);
+                    itemContainerPostMultipleImagesBinding.imgPost3.setVisibility(View.GONE);
                 } else if (urlList.size() == 3) {
-                    imgPost3.setVisibility(View.VISIBLE);
-                    horizontalSeparator.setVisibility(View.VISIBLE);
-                    Glide.with(imgPost.getContext()).load(urlList.get(0).getUrl()).into(imgPost);
-                    Glide.with(imgPost.getContext()).load(urlList.get(1).getUrl()).into(imgPost2);
-                    Glide.with(imgPost.getContext()).load(urlList.get(2).getUrl()).into(imgPost3);
+                    itemContainerPostMultipleImagesBinding.imgPost3.setVisibility(View.VISIBLE);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(0).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(1).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost2);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(2).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost3);
                 } else {
-                    imgPost3.setVisibility(View.VISIBLE);
-                    horizontalSeparator.setVisibility(View.VISIBLE);
-                    Glide.with(imgPost.getContext()).load(urlList.get(0).getUrl()).into(imgPost);
-                    Glide.with(imgPost.getContext()).load(urlList.get(1).getUrl()).into(imgPost2);
-                    Glide.with(imgPost.getContext()).load(urlList.get(2).getUrl()).into(imgPost3);
-
-                    txtNumberOfImages.setVisibility(View.VISIBLE);
-                    String text = "+" + (urlList.size() - 3);
-                    txtNumberOfImages.setText(text);
+                    itemContainerPostMultipleImagesBinding.imgPost3.setVisibility(View.VISIBLE);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(0).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(1).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost2);
+                    Glide.with(itemContainerPostMultipleImagesBinding.imgPost.getContext()).load(urlList.get(2).getUrl()).into(itemContainerPostMultipleImagesBinding.imgPost3);
                 }
             }
-        }
-
-        protected void setProfileImage(String url) {
-            if (url != null) {
-                if (!url.isEmpty()) {
-                    Glide.with(imgProfile.getContext())
-                            .load(url)
-                            .circleCrop()
-                            .error(R.drawable.ic_empty_profile)
-                            .into(imgProfile);
-
-                } else imgProfile.setImageResource(R.drawable.ic_empty_profile);
-            } else imgProfile.setImageResource(R.drawable.ic_empty_profile);
-
         }
     }
 
@@ -281,7 +196,5 @@ public class PostAdapter extends RecyclerView.Adapter {
         void openCommentSection(final int pos);
 
         void onProfileClick(int pos);
-
-        void removeItemWithNoUser(int pos);
     }
 }
